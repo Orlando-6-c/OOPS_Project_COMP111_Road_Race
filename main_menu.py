@@ -1,10 +1,11 @@
 import pygame
 from utils import get_font
 from button import Button
+from base_screen import BaseScreen
 
-class MainMenu:
+class MainMenu(BaseScreen):
     def __init__(self, screen):
-        self.screen = screen
+        super().__init__(screen)
         self.bg = pygame.image.load("assets/bg.png")
 
     def run(self):

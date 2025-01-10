@@ -22,7 +22,7 @@ def main():
 
     while True:
         # Display Login Screen
-        login_screen = LoginScreen(screen, login_system)
+        login_screen = LoginScreen(screen, login_system)  #Aggregation
         action = login_screen.run()
 
         if action == "main_menu":
