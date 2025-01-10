@@ -1,73 +1,91 @@
+import sys
 import pygame
+from splash_screen import SplashScreen  # Import the SplashScreen class
+from login_screen import LoginScreen
 from main_menu import MainMenu
-from start_game import StartGame
 from level_selection import LevelSelection
 from game import Game
 from leaderboard import Leaderboard
-from pause_menu import PauseMenu
+from login_system import LoginSystem
+
 
 def main():
-    # Initialize Pygame
-    pygame.init()
-    
-    # Create the screen
+    pygame.init()  # Initialize Pygame
     screen = pygame.display.set_mode((500, 500))
     pygame.display.set_caption("Road Race")
 
-    # Create MainMenu
-    menu = MainMenu(screen)
+    # Show Splash Screen
+    splash_screen = SplashScreen(screen)  #Composition happening here
+    splash_screen.run()
 
-    running = True
+    login_system = LoginSystem() 
 
-    while running:
-        choice = menu.run()
+    while True:
+        # Display Login Screen
+        login_screen = LoginScreen(screen, login_system)
+        action = login_screen.run()
 
-        if choice == "start_game":
-            # Handle New User or Existing User
-            start_game = StartGame(screen)
-            user = start_game.run()
-            if user and user != "back":
-                level_selection = LevelSelection(screen, user)
+        if action == "main_menu":
+            while True:
+                # Display Main Menu
+                main_menu = MainMenu(screen) #COMPOSITION
+                menu_action = main_menu.run() 
 
-                # Initialize user's score to 0 for a new session
-                user_score = 0
+                if menu_action == "start_game":
+                    while True:
+                        # Fetch Player Data
+                        player_data = login_system.get_logged_in_player_data()
 
-                while True:
-                    level = level_selection.run(user_score)  # Pass the current score to unlock levels
-                    if level and level != "back":
-                        game = Game(screen, user, level)
-                        while True:
-                            game_result = game.run()
-                            if game_result == "pause":
-                                # Pause Menu
-                                pause_menu = PauseMenu(screen)
-                                pause_choice = pause_menu.run()
-                                if pause_choice == "main_menu":
-                                    break
-                                elif pause_choice == "restart":
-                                    game = Game(screen, user, level)
-                            elif game_result == "game_over":
-                                # Update leaderboard and score
-                                leaderboard = Leaderboard(screen)
-                                leaderboard.update_leaderboard(user, game.score)
-                                user_score = max(user_score, game.score)  # Update user's score if it's higher
-                                break
-                            else:
-                                break
-                    else:
-                        break
+                        # Display Level Selection Screen
+                        level_selection = LevelSelection(screen, player_data)
+                        selected_level = level_selection.run()
 
-        elif choice == "leaderboard":
-            # Show Leaderboard
-            leaderboard = Leaderboard(screen)
-            if leaderboard.run() == "back":
-                continue
+                        if selected_level == "back":
+                            break  # Return to the main menu
 
-        elif choice == "quit":
-            running = False
+                        while True:  # Allow level restart
+                            # Start the Game
+                            game = Game(
+                                screen,
+                                player_data,
+                                int(selected_level["level"].split()[-1]),  # Extract the level number from the dictionary
+                                selected_level["max_score"],  # Access max_score directly
+                            )
+                            result = game.run()  # Play the game
 
-    # Quit Pygame
-    pygame.quit()
+                            # Handle the result
+                            if result == "quit":  # Handle close window
+                                pygame.quit()
+                                sys.exit()
+                            elif isinstance(result, int):  # If the result is a valid score
+                                # Update player's score
+                                player_data["score"] = max(int(player_data.get("score", 0)), result)
+
+                                # Mark the level as completed if it isn't already
+                                if selected_level["level"] not in player_data.get("completed_levels", []):
+                                    player_data.setdefault("completed_levels", []).append(selected_level["level"])
+
+                                # Save updated player data
+                                login_system.save_logged_in_player_data(player_data)
+                                break  # Exit the level loop after finishing the level
+                            elif result == "restart":  # Restart the current level
+                                continue  # Re-run the level
+                            elif result == "main menu":  # Return to the main menu
+                                break  # Exit the level loop
+
+                elif menu_action == "leaderboard":
+                    # Display Leaderboard
+                    leaderboard = Leaderboard(screen, login_system)
+                    leaderboard.run()
+
+                elif menu_action == "quit":
+                    pygame.quit()
+                    sys.exit()  # Ensure the program exits cleanly
+
+        elif action == "quit":
+            pygame.quit()
+            sys.exit()  # Exit when quitting from the login screen
+
 
 if __name__ == "__main__":
     main()

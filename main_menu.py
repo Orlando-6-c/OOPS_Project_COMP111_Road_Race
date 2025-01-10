@@ -1,39 +1,38 @@
+import pygame
 from utils import get_font
 from button import Button
-import pygame
-bg_main_menu=pygame.image.load("assets/bg.png")
+
 class MainMenu:
     def __init__(self, screen):
         self.screen = screen
+        self.bg = pygame.image.load("assets/bg.png")
 
     def run(self):
         while True:
-            self.screen.blit(bg_main_menu, (0,0))
+            self.screen.blit(self.bg, (0, 0))
             mouse_pos = pygame.mouse.get_pos()
 
-            menu_text = get_font(50).render("MAIN MENU", True, "#b68f40")
-            menu_rect = menu_text.get_rect(center=(250, 100))
-            self.screen.blit(menu_text, menu_rect)
+            # Title
+            title = get_font(40).render("Main Menu", True, (255, 255, 255))
+            title_rect = title.get_rect(center=(250, 50))
+            self.screen.blit(title, title_rect)
 
-            create_player_button = Button(
-                image=None, pos=(250, 200),
-                text_input="Start", font=get_font(30), base_color="#d7fcd4", hovering_color="black")
-            leaderboard_button = Button(
-                image=None, pos=(250, 300),
-                text_input="Leader Board", font=get_font(30), base_color="#d7fcd4", hovering_color="black")
-            quit_button = Button(
-                image=None, pos=(250, 400),
-                text_input="QUIT", font=get_font(40), base_color="#d7fcd4", hovering_color="black")
+            # Buttons
+            start_button = Button(None, (250, 200), "Start Game", get_font(30), "#d7fcd4", "black")
+            leaderboard_button = Button(None, (250, 300), "Leaderboard", get_font(30), "#d7fcd4", "black")
+            quit_button = Button(None, (250, 400), "Quit", get_font(30), "#d7fcd4", "black")
 
-            for button in [create_player_button, leaderboard_button, quit_button]:
+            buttons = [start_button, leaderboard_button, quit_button]
+            for button in buttons:
                 button.changeColor(mouse_pos)
                 button.update(self.screen)
 
+            # Event handling
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return "quit"
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if create_player_button.checkForInput(mouse_pos):
+                    if start_button.checkForInput(mouse_pos):
                         return "start_game"
                     elif leaderboard_button.checkForInput(mouse_pos):
                         return "leaderboard"

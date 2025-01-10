@@ -1,39 +1,32 @@
+from base_screen import BaseScreen
 from button import Button
-import pygame
 from utils import get_font
-class PauseMenu:
+import pygame
+
+class PauseMenu(BaseScreen):
     def __init__(self, screen):
-        self.screen = screen
-        self.font = pygame.font.Font(None, 40)
+        super().__init__(screen)
+        self.buttons = [
+            Button(None, (250, 200), "Resume", get_font(30), "#d7fcd4", "black"),
+            Button(None, (250, 300), "Restart", get_font(30), "#d7fcd4", "black"),
+            Button(None, (250, 400), "Main Menu", get_font(30), "#d7fcd4", "black"),
+        ]
 
     def run(self):
+        """Run the pause menu screen."""
         while True:
-            self.screen.fill((50, 50, 50))
+            self.screen.fill((0, 0, 0))
             mouse_pos = pygame.mouse.get_pos()
 
-            resume_button = Button(
-                image=None, pos=(250, 150),
-                text_input="Resume", font=get_font(40), base_color="#d7fcd4", hovering_color="black")
-            restart_button = Button(
-                image=None, pos=(250, 250),
-                text_input="Restart", font=get_font(40), base_color="#d7fcd4", hovering_color="black")
-            main_menu_button = Button(
-                image=None, pos=(250, 350),
-                text_input="Main Menu", font=get_font(40), base_color="#d7fcd4", hovering_color="black")
+            # Title
+            title = get_font(40).render("PAUSED", True, (255, 255, 255))
+            title_rect = title.get_rect(center=(250, 100))
+            self.screen.blit(title, title_rect)
 
-            for button in [resume_button, restart_button, main_menu_button]:
-                button.changeColor(mouse_pos)
-                button.update(self.screen)
+            self.draw_buttons(mouse_pos)
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return None
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if resume_button.checkForInput(mouse_pos):
-                        return "resume"
-                    elif restart_button.checkForInput(mouse_pos):
-                        return "restart"
-                    elif main_menu_button.checkForInput(mouse_pos):
-                        return "main_menu"
+            action = self.handle_events(mouse_pos)
+            if action in ["resume", "restart", "main menu"]:
+                return action
 
             pygame.display.flip()
