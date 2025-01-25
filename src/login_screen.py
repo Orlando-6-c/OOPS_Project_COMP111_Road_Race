@@ -2,7 +2,7 @@ from base_screen import BaseScreen
 from button import Button
 from utils import get_font
 import pygame
-bg=pygame.image.load("assets/bg_login.png")
+bg=pygame.image.load("../assets/bg_login.png")
 class LoginScreen(BaseScreen):
     def __init__(self, screen, login_system):
         super().__init__(screen)

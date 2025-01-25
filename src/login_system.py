@@ -2,7 +2,7 @@ import pickle
 
 class LoginSystem:
     def __init__(self):
-        self.data_file = "user_data.pkl"
+        self.data_file = "../data/user_data.pkl"
         self.logged_in_user = None
         self.load_data()
 

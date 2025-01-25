@@ -5,8 +5,8 @@ from base_screen import BaseScreen
 class SplashScreen(BaseScreen):
     def __init__(self, screen):
         super().__init__(screen)
-        self.logo = pygame.image.load("assets/splash_logo.png").convert_alpha()  # Your splash logo
-        self.bg = pygame.image.load("assets/splash_bg.png") # Background color (black)
+        self.logo = pygame.image.load("../assets/splash_logo.png").convert_alpha()  # Your splash logo
+        self.bg = pygame.image.load("../assets/splash_bg.png") # Background color (black)
         self.duration = 3  # Splash screen duration in seconds
         self.fade_speed = 5  # Fade-in/out speed
 
