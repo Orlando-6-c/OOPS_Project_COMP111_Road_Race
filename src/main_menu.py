@@ -6,7 +6,7 @@ from base_screen import BaseScreen
 class MainMenu(BaseScreen):
     def __init__(self, screen):
         super().__init__(screen)
-        self.bg = pygame.image.load("assets/bg.png")
+        self.bg = pygame.image.load("../assets/bg.png")
 
     def run(self):
         while True:

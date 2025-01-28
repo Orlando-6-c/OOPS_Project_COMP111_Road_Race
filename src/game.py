@@ -10,35 +10,35 @@ class Game:
         self.level = level
         self.running = True
         self.clock = pygame.time.Clock()
-        self.font = pygame.font.Font("assets/font.ttf", 25)
+        self.font = pygame.font.Font("../assets/font.ttf", 25)
         self.collected_coins = 0
         self.collected_gems = 0
         self.power_up_active = False
         self.power_up_timer = 0
-        self.font=pygame.font.Font("assets/font.ttf", 25)
+        self.font=pygame.font.Font("../assets/font.ttf", 25)
 
         # Level-specific settings
         self.settings = {
             "level_1": {
                 "speed_multiplier": 1,
-                "background": "assets/level_1_bg.png",
-                "car": "assets/car_level_1.png",
-                "obstacle": "assets/obstacle_level_1.png",
+                "background": "../assets/level_1_bg.png",
+                "car": "../assets/car_level_1.png",
+                "obstacle": "../assets/obstacle_level_1.png",
                 "power_up": None,
             },
             "level_2": {
                 "speed_multiplier": 1.5,
-                "background": "assets/level_2_bg.png",
-                "car": "assets/car_level_2.png",
-                "obstacle": "assets/obstacle_level_2.png",
-                "power_up": "assets/power_up.png",
+                "background": "../assets/level_2_bg.png",
+                "car": "../assets/car_level_2.png",
+                "obstacle": "../assets/obstacle_level_2.png",
+                "power_up": "../assets/power_up.png",
             },
             "level_3": {
                 "speed_multiplier": 2,
-                "background": "assets/level_3_bg.png",
-                "car": "assets/car_level_3.png",
-                "obstacle": "assets/obstacle_level_3.png",
-                "power_up": "assets/power_up.png",
+                "background": "../assets/level_3_bg.png",
+                "car": "../assets/car_level_3.png",
+                "obstacle": "../assets/obstacle_level_3.png",
+                "power_up": "../assets/power_up.png",
             },
         }
 
@@ -46,21 +46,21 @@ class Game:
         self.obstacle_speed = 5 * self.level_config["speed_multiplier"]
         self.collectible_speed = 3 * self.level_config["speed_multiplier"]
 
-        # Load assets
+        # Load ../assets
         self.background = pygame.image.load(self.level_config["background"]).convert()
         self.car_image = pygame.image.load(self.level_config["car"]).convert_alpha()
         self.obstacle_image = pygame.image.load(self.level_config["obstacle"]).convert_alpha()
-        self.coin_image = pygame.image.load("assets/coin.png").convert_alpha()
-        self.gem_image = pygame.image.load("assets/gem.png").convert_alpha()
+        self.coin_image = pygame.image.load("../assets/coin.png").convert_alpha()
+        self.gem_image = pygame.image.load("../assets/gem.png").convert_alpha()
         self.power_up_image = (
             pygame.image.load(self.level_config["power_up"]).convert_alpha()
             if self.level_config["power_up"]
             else None
         )
-        self.collision_sound = pygame.mixer.Sound("assets/collision.wav")
-        self.coin_sound = pygame.mixer.Sound("assets/coin_collect.wav")  # Added coin sound
-        self.explosion_images = [pygame.image.load(f"assets/tile00{i}.png").convert_alpha() for i in range(7)]
-        self.power_up_sound=pygame.mixer.Sound("assets/power_up.wav")
+        self.collision_sound = pygame.mixer.Sound("../assets/collision.wav")
+        self.coin_sound = pygame.mixer.Sound("../assets/coin_collect.wav")  # Added coin sound
+        self.explosion_images = [pygame.image.load(f"../assets/tile00{i}.png").convert_alpha() for i in range(7)]
+        self.power_up_sound=pygame.mixer.Sound("../assets/power_up.wav")
         self.car = pygame.Rect(230, 400, 40, 80)
 
         # Background positions for scrolling
@@ -71,7 +71,7 @@ class Game:
         self.pause_menu = PauseMenu(self.screen)
 
         # Background music
-        pygame.mixer.music.load("assets/background_music.wav")
+        pygame.mixer.music.load("../assets/background_music.wav")
         pygame.mixer.music.set_volume(0.5)
         pygame.mixer.music.play(-1)
 

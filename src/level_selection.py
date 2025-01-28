@@ -4,7 +4,7 @@ from utils import get_font
 import pygame
 import tkinter
 from tkinter import messagebox
-bg=pygame.image.load("assets/level.png")
+bg=pygame.image.load("../assets/level.png")
 class LevelSelection(BaseScreen):
     def __init__(self, screen, player_data):
         super().__init__(screen)
